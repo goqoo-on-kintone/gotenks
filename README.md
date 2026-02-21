@@ -9,8 +9,36 @@ A CLI tool that generates Go type definitions from kintone TypeScript type defin
 
 ## Installation
 
+### Homebrew (macOS / Linux)
+
+```bash
+brew install goqoo-on-kintone/tap/gotenks
+```
+
+### go install
+
 ```bash
 go install github.com/goqoo-on-kintone/gotenks/cmd/gotenks@latest
+```
+
+### Binary Download
+
+Download platform-specific binaries from [GitHub Releases](https://github.com/goqoo-on-kintone/gotenks/releases):
+
+- `gotenks_X.X.X_darwin_amd64.tar.gz` (macOS Intel)
+- `gotenks_X.X.X_darwin_arm64.tar.gz` (macOS Apple Silicon)
+- `gotenks_X.X.X_linux_amd64.tar.gz` (Linux x64)
+- `gotenks_X.X.X_linux_arm64.tar.gz` (Linux ARM64)
+- `gotenks_X.X.X_windows_amd64.zip` (Windows x64)
+- `gotenks_X.X.X_windows_arm64.zip` (Windows ARM64)
+
+### Build from Source
+
+```bash
+git clone https://github.com/goqoo-on-kintone/gotenks.git
+cd gotenks
+make build
+# Binary is generated at bin/gotenks
 ```
 
 ## Usage

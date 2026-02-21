@@ -9,8 +9,36 @@ kintone の TypeScript 型定義ファイル (.d.ts) から Go の型定義を�
 
 ## インストール
 
+### Homebrew（macOS / Linux）
+
+```bash
+brew install goqoo-on-kintone/tap/gotenks
+```
+
+### go install
+
 ```bash
 go install github.com/goqoo-on-kintone/gotenks/cmd/gotenks@latest
+```
+
+### バイナリダウンロード
+
+[GitHub Releases](https://github.com/goqoo-on-kintone/gotenks/releases) からプラットフォーム別のバイナリをダウンロード：
+
+- `gotenks_X.X.X_darwin_amd64.tar.gz`（macOS Intel）
+- `gotenks_X.X.X_darwin_arm64.tar.gz`（macOS Apple Silicon）
+- `gotenks_X.X.X_linux_amd64.tar.gz`（Linux x64）
+- `gotenks_X.X.X_linux_arm64.tar.gz`（Linux ARM64）
+- `gotenks_X.X.X_windows_amd64.zip`（Windows x64）
+- `gotenks_X.X.X_windows_arm64.zip`（Windows ARM64）
+
+### ソースからビルド
+
+```bash
+git clone https://github.com/goqoo-on-kintone/gotenks.git
+cd gotenks
+make build
+# bin/gotenks が生成される
 ```
 
 ## 使い方
