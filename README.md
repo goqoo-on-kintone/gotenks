@@ -71,12 +71,12 @@ gotenks -input ./dts -output ./gen -prefix ""
 
 ## Options
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `-input` | (required) | Input .d.ts file or directory |
-| `-output` | stdout | Output .go file or directory |
-| `-package` | `kintone` | Package name for generated Go code |
-| `-prefix` | `K` | Prefix for field names (for exporting Japanese field names) |
+| Option | Short | Default | Description |
+|--------|-------|---------|-------------|
+| `-input` | `-i` | (required) | Input .d.ts file or directory |
+| `-output` | `-o` | stdout | Output .go file or directory |
+| `-package` | | `kintone` | Package name for generated Go code |
+| `-prefix` | | `K` | Prefix for field names (for exporting Japanese field names) |
 
 ## Using Generated Code
 

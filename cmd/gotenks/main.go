@@ -13,26 +13,30 @@ import (
 
 func main() {
 	// コマンドライン引数の定義
-	input := flag.String("input", "", "Input .d.ts file or directory")
-	output := flag.String("output", "", "Output .go file or directory (default: stdout)")
-	pkg := flag.String("package", "kintone", "Package name for generated Go code")
-	prefix := flag.String("prefix", "K", "Prefix for field names (must start with uppercase letter)")
+	var input, output, pkg, prefix string
+
+	flag.StringVar(&input, "input", "", "Input .d.ts file or directory")
+	flag.StringVar(&input, "i", "", "Input .d.ts file or directory (shorthand)")
+	flag.StringVar(&output, "output", "", "Output .go file or directory (default: stdout)")
+	flag.StringVar(&output, "o", "", "Output .go file or directory (shorthand)")
+	flag.StringVar(&pkg, "package", "kintone", "Package name for generated Go code")
+	flag.StringVar(&prefix, "prefix", "K", "Prefix for field names (must start with uppercase letter)")
 	flag.Parse()
 
-	if *input == "" {
+	if input == "" {
 		fmt.Fprintln(os.Stderr, "Error: -input is required")
 		flag.Usage()
 		os.Exit(1)
 	}
 
 	// プレフィックスの検証
-	if err := generator.ValidatePrefix(*prefix); err != nil {
+	if err := generator.ValidatePrefix(prefix); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 
 	// 入力がファイルかディレクトリかを判定
-	info, err := os.Stat(*input)
+	info, err := os.Stat(input)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
@@ -40,10 +44,10 @@ func main() {
 
 	if info.IsDir() {
 		// ディレクトリの場合、全 .d.ts ファイルを処理
-		err = processDirectory(*input, *output, *pkg, *prefix)
+		err = processDirectory(input, output, pkg, prefix)
 	} else {
 		// 単一ファイルの場合
-		err = processFile(*input, *output, *pkg, *prefix)
+		err = processFile(input, output, pkg, prefix)
 	}
 
 	if err != nil {
