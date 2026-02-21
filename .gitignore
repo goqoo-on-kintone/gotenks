@@ -25,8 +25,5 @@ go.work
 .DS_Store
 Thumbs.db
 
-# Generated output
-examples/output/*.go
-
 # Temporary files
 tmp/

@@ -14,8 +14,10 @@ gotenks は、kintone アプリの TypeScript 型定義ファイル (.d.ts) か�
 │   ├── parser/          # .d.ts パーサー
 │   ├── generator/       # Go コード生成
 │   └── types/           # kintone フィールド型定義
-├── testdata/            # テスト用 .d.ts ファイル
-└── examples/            # 入出力サンプル
+├── examples/
+│   ├── input/           # サンプル .d.ts ファイル
+│   └── output/          # 生成された .go ファイル
+└── testdata/            # テスト用 .d.ts ファイル
 ```
 
 ## 開発コマンド
@@ -36,7 +38,7 @@ make fmt        # go fmt
 ## kintone 型定義の構造（入力ファイル）
 
 ```typescript
-// testdata/*.d.ts の基本構造
+// examples/input/*.d.ts の基本構造
 declare namespace kintone.types {
   interface XxxFields {
     フィールド名: kintone.fieldTypes.SingleLineText;
