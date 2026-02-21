@@ -13,21 +13,28 @@ import (
 
 func main() {
 	// コマンドライン引数の定義
-	var input, output, pkg, prefix string
+	var output, pkg, prefix string
 
-	flag.StringVar(&input, "input", "", "Input .d.ts file or directory")
-	flag.StringVar(&input, "i", "", "Input .d.ts file or directory (shorthand)")
 	flag.StringVar(&output, "output", "", "Output .go file or directory (default: stdout)")
 	flag.StringVar(&output, "o", "", "Output .go file or directory (shorthand)")
 	flag.StringVar(&pkg, "package", "kintone", "Package name for generated Go code")
 	flag.StringVar(&prefix, "prefix", "K", "Prefix for field names (must start with uppercase letter)")
+
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage: gotenks [options] <input.d.ts or directory>\n\nOptions:\n")
+		flag.PrintDefaults()
+	}
+
 	flag.Parse()
 
-	if input == "" {
-		fmt.Fprintln(os.Stderr, "Error: -input is required")
+	// 位置引数から入力を取得
+	args := flag.Args()
+	if len(args) == 0 {
+		fmt.Fprintln(os.Stderr, "Error: input file or directory is required")
 		flag.Usage()
 		os.Exit(1)
 	}
+	input := args[0]
 
 	// プレフィックスの検証
 	if err := generator.ValidatePrefix(prefix); err != nil {

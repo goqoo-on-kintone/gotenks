@@ -18,7 +18,7 @@ npm install -g @goqoo/gotenks
 グローバルインストールなしで使う場合：
 
 ```bash
-npx @goqoo/gotenks -input ./fields.d.ts -output ./gen/
+npx @goqoo/gotenks ./fields.d.ts -o ./gen/
 ```
 
 ### Homebrew（macOS / Linux）
@@ -57,23 +57,25 @@ make build
 
 ```bash
 # ディレクトリ内の全 .d.ts ファイルを変換
-gotenks -input ./dts -output ./gen/kintone
+gotenks ./dts -o ./gen/kintone
 
 # 単一ファイルを変換
-gotenks -input ./customer-fields.d.ts -output ./customer.go
+gotenks ./customer-fields.d.ts -o ./customer.go
 
 # パッケージ名を指定
-gotenks -input ./dts -output ./gen -package myapp
+gotenks ./dts -o ./gen -package myapp
 
 # prefix なしで生成（ASCII フィールドコードのみの場合）
-gotenks -input ./dts -output ./gen -prefix ""
+gotenks ./dts -o ./gen -prefix ""
+
+# 標準出力に出力（デフォルト）
+gotenks ./fields.d.ts
 ```
 
 ## オプション
 
 | オプション | 短縮形 | デフォルト | 説明 |
 |-----------|-------|-----------|------|
-| `-input` | `-i` | (必須) | 入力 .d.ts ファイルまたはディレクトリ |
 | `-output` | `-o` | stdout | 出力 .go ファイルまたはディレクトリ |
 | `-package` | | `kintone` | 生成する Go コードのパッケージ名 |
 | `-prefix` | | `K` | フィールド名のプレフィックス（日本語フィールド名のエクスポート用） |

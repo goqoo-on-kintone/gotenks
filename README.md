@@ -18,7 +18,7 @@ npm install -g @goqoo/gotenks
 Or use npx without global installation:
 
 ```bash
-npx @goqoo/gotenks -input ./fields.d.ts -output ./gen/
+npx @goqoo/gotenks ./fields.d.ts -o ./gen/
 ```
 
 ### Homebrew (macOS / Linux)
@@ -57,23 +57,25 @@ make build
 
 ```bash
 # Convert all .d.ts files in a directory
-gotenks -input ./dts -output ./gen/kintone
+gotenks ./dts -o ./gen/kintone
 
 # Convert a single file
-gotenks -input ./customer-fields.d.ts -output ./customer.go
+gotenks ./customer-fields.d.ts -o ./customer.go
 
 # Specify package name
-gotenks -input ./dts -output ./gen -package myapp
+gotenks ./dts -o ./gen -package myapp
 
 # Generate without prefix (for ASCII-only field codes)
-gotenks -input ./dts -output ./gen -prefix ""
+gotenks ./dts -o ./gen -prefix ""
+
+# Output to stdout (default)
+gotenks ./fields.d.ts
 ```
 
 ## Options
 
 | Option | Short | Default | Description |
 |--------|-------|---------|-------------|
-| `-input` | `-i` | (required) | Input .d.ts file or directory |
 | `-output` | `-o` | stdout | Output .go file or directory |
 | `-package` | | `kintone` | Package name for generated Go code |
 | `-prefix` | | `K` | Prefix for field names (for exporting Japanese field names) |
