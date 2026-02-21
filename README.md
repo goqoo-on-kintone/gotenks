@@ -16,7 +16,22 @@ gotenks -input ./dts -output ./gen/kintone
 
 # 単一ファイルを変換
 gotenks -input ./customer-fields.d.ts -output ./customer.go
+
+# パッケージ名を指定
+gotenks -input ./dts -output ./gen -package myapp
+
+# prefix なしで生成（ASCII フィールドコードのみの場合）
+gotenks -input ./dts -output ./gen -prefix ""
 ```
+
+## Options
+
+| オプション | デフォルト | 説明 |
+|-----------|-----------|------|
+| `-input` | (必須) | 入力 .d.ts ファイルまたはディレクトリ |
+| `-output` | stdout | 出力 .go ファイルまたはディレクトリ |
+| `-package` | `kintone` | 生成する Go コードのパッケージ名 |
+| `-prefix` | `K` | フィールド名のプレフィックス（日本語フィールド名のエクスポート用） |
 
 ## 入力ファイルの生成
 

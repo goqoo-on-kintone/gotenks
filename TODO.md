@@ -4,20 +4,20 @@ dts/*.d.ts から Go の kintone 型定義を生成するツールの開発タ�
 
 ---
 
-## タスク一覧
+## 完了済みタスク
 
-### 1. プロジェクト構成を決める
+- [x] プロジェクト構成を決める
+- [x] kintone フィールド型の Go 定義を作成（全24種類対応）
+- [x] TypeScript パーサーを実装（コメント行スキップ対応）
+- [x] Go コード生成ロジックを実装（extends → 埋め込み対応）
+- [x] サブテーブル型の変換に対応（Subtable[T] ジェネリクス）
+- [x] フィールド名のエスケープ処理（日本語・記号対応）
+- [x] CLI インターフェースを実装（-input, -output, -package, -prefix オプション）
+- [x] テスト用 dts で動作確認
 
-```
-cmd/gotenks/
-├── main.go          # CLI エントリーポイント
-├── parser/
-│   └── parser.go    # .d.ts パーサー
-├── generator/
-│   └── generator.go # Go コード生成
-└── types/
-    └── fields.go    # kintone フィールド型の Go 定義
-```
+---
+
+## 対応済みフィールド型
 
 ### 2. kintone フィールド型の Go 定義を作成
 
