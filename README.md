@@ -66,6 +66,14 @@ gotenks -input ./dts -output ./gen -prefix ""
 | `-package` | `kintone` | Package name for generated Go code |
 | `-prefix` | `K` | Prefix for field names (for exporting Japanese field names) |
 
+## Using Generated Code
+
+Generated Go code imports the `types` package. Add it as a dependency to your project:
+
+```bash
+go get github.com/goqoo-on-kintone/gotenks/types@latest
+```
+
 ## Supported Field Types
 
 | Category | TypeScript | Go Type |

@@ -66,6 +66,14 @@ gotenks -input ./dts -output ./gen -prefix ""
 | `-package` | `kintone` | 生成する Go コードのパッケージ名 |
 | `-prefix` | `K` | フィールド名のプレフィックス（日本語フィールド名のエクスポート用） |
 
+## 生成コードの利用
+
+生成された Go コードは `types` パッケージをインポートします。プロジェクトに依存関係を追加してください：
+
+```bash
+go get github.com/goqoo-on-kintone/gotenks/types@latest
+```
+
 ## 対応フィールド型
 
 | カテゴリ | TypeScript | Go 型 |
