@@ -31,11 +31,11 @@ type AllFieldsJa struct {
 
 type SavedAllFieldsJa struct {
 	AllFieldsJa
-	KID       types.IDField           `json:"$id"`
-	KRevision types.RevisionField     `json:"$revision"`
-	K更新者      types.ModifierField     `json:"更新者"`
-	K作成者      types.CreatorField      `json:"作成者"`
-	Kレコード番号   types.RecordNumberField `json:"レコード番号"`
-	K更新日時     types.UpdatedTimeField  `json:"更新日時"`
-	K作成日時     types.CreatedTimeField  `json:"作成日時"`
+	ID       types.IDField           `json:"$id"`
+	Revision types.RevisionField     `json:"$revision"`
+	K更新者     types.ModifierField     `json:"更新者"`
+	K作成者     types.CreatorField      `json:"作成者"`
+	Kレコード番号  types.RecordNumberField `json:"レコード番号"`
+	K更新日時    types.UpdatedTimeField  `json:"更新日時"`
+	K作成日時    types.CreatedTimeField  `json:"作成日時"`
 }

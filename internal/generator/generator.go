@@ -3,6 +3,7 @@ package generator
 
 import (
 	"fmt"
+	"go/format"
 	"strings"
 	"unicode"
 
@@ -30,7 +31,13 @@ func Generate(result *parser.ParseResult, config Config) string {
 		generateStruct(&sb, iface, result, config)
 	}
 
-	return sb.String()
+	// go fmt でフォーマット
+	formatted, err := format.Source([]byte(sb.String()))
+	if err != nil {
+		// フォーマットに失敗した場合はそのまま返す
+		return sb.String()
+	}
+	return string(formatted)
 }
 
 // generateStruct は interface を Go の struct として出力する
@@ -95,19 +102,18 @@ func generateField(sb *strings.Builder, field parser.Field, config Config) {
 
 // toGoIdentifier はフィールド名を Go の有効な識別子に変換する
 // すべてのフィールドにプレフィックスを付けてエクスポート可能にする
+// ただし $id, $revision は常に prefix なしで ID, Revision とする
 func toGoIdentifier(name string, prefix string) string {
-	var result strings.Builder
-	result.WriteString(prefix)
-
-	// $id, $revision は特別扱い
+	// $id, $revision は常に prefix なしで固定名
 	if name == "$id" {
-		result.WriteString("ID")
-		return result.String()
+		return "ID"
 	}
 	if name == "$revision" {
-		result.WriteString("Revision")
-		return result.String()
+		return "Revision"
 	}
+
+	var result strings.Builder
+	result.WriteString(prefix)
 
 	capitalizeNext := true
 

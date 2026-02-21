@@ -39,8 +39,12 @@ func TestGenerate_SimpleStruct(t *testing.T) {
 	}
 
 	// フィールドのチェック（Kプレフィックス付き）
-	if !strings.Contains(code, "K会社名 types.SingleLineTextField") {
+	// go fmt 後はスペースが調整されるので、個別にチェック
+	if !strings.Contains(code, "K会社名") {
 		t.Error("generated code should contain K会社名 field")
+	}
+	if !strings.Contains(code, "types.SingleLineTextField") {
+		t.Error("generated code should contain SingleLineTextField type")
 	}
 	if !strings.Contains(code, `json:"会社名"`) {
 		t.Error("generated code should contain json tag for 会社名")
@@ -88,9 +92,10 @@ func TestGenerate_WithExtends(t *testing.T) {
 		t.Error("SavedCustomerFields should embed CustomerFields")
 	}
 
-	// 自身のフィールドが含まれているか（Kプレフィックス付き）
-	if !strings.Contains(savedStruct, "KID types.IDField") {
-		t.Error("SavedCustomerFields should contain KID field")
+	// 自身のフィールドが含まれているか（$id, $revision は prefix なし）
+	// go fmt 後はスペースが調整されるので、個別にチェック
+	if !strings.Contains(savedStruct, "ID") || !strings.Contains(savedStruct, "types.IDField") {
+		t.Error("SavedCustomerFields should contain ID field")
 	}
 }
 
@@ -99,8 +104,8 @@ func TestToGoIdentifier(t *testing.T) {
 		input    string
 		expected string
 	}{
-		{"$id", "KID"},
-		{"$revision", "KRevision"},
+		{"$id", "ID"},             // 常に prefix なし
+		{"$revision", "Revision"}, // 常に prefix なし
 		{"会社名", "K会社名"},
 		{"user_name", "KUserName"},
 		{"user-name", "KUserName"},

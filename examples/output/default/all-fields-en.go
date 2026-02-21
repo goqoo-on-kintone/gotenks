@@ -31,8 +31,8 @@ type AllFieldsEn struct {
 
 type SavedAllFieldsEn struct {
 	AllFieldsEn
-	KID              types.IDField           `json:"$id"`
-	KRevision        types.RevisionField     `json:"$revision"`
+	ID               types.IDField           `json:"$id"`
+	Revision         types.RevisionField     `json:"$revision"`
 	KCreatedBy       types.CreatorField      `json:"Created_by"`
 	KUpdatedBy       types.ModifierField     `json:"Updated_by"`
 	KUpdatedDatetime types.UpdatedTimeField  `json:"Updated_datetime"`
