@@ -36,6 +36,11 @@ func Generate(result *parser.ParseResult, config Config) string {
 func generateStruct(sb *strings.Builder, iface parser.Interface, result *parser.ParseResult) {
 	structName := iface.Name
 
+	// まずサブテーブルの Row 構造体を先に生成
+	// 注: 親の Row 構造体は親インターフェース処理時に既に生成されているため、
+	// extends の場合は自身のフィールドのみ処理する
+	generateSubtableRowStructs(sb, iface.Fields)
+
 	sb.WriteString(fmt.Sprintf("// %s は kintone アプリのレコード型\n", structName))
 	sb.WriteString(fmt.Sprintf("type %s struct {\n", structName))
 
@@ -60,14 +65,41 @@ func generateStruct(sb *strings.Builder, iface parser.Interface, result *parser.
 	sb.WriteString("}\n\n")
 }
 
+// generateSubtableRowStructs はサブテーブルの Row 構造体を生成する
+func generateSubtableRowStructs(sb *strings.Builder, fields []parser.Field) {
+	for _, field := range fields {
+		if !field.IsSubtable {
+			continue
+		}
+
+		rowStructName := toGoIdentifier(field.Name) + "Row"
+
+		sb.WriteString(fmt.Sprintf("// %s は %s サブテーブルの1行を表す\n", rowStructName, field.Name))
+		sb.WriteString(fmt.Sprintf("type %s struct {\n", rowStructName))
+
+		for _, subField := range field.SubtableFields {
+			generateField(sb, subField)
+		}
+
+		sb.WriteString("}\n\n")
+	}
+}
+
 // generateField は1つのフィールドを出力する
 func generateField(sb *strings.Builder, field parser.Field) {
 	goFieldName := toGoIdentifier(field.Name)
-	goTypeName := parser.TypeScriptToGoType(field.TypeName)
 
-	// JSON タグで元のフィールド名を保持
-	sb.WriteString(fmt.Sprintf("\t%s types.%s `json:\"%s\"`\n",
-		goFieldName, goTypeName, field.Name))
+	if field.IsSubtable {
+		// サブテーブルフィールド
+		rowStructName := goFieldName + "Row"
+		sb.WriteString(fmt.Sprintf("\t%s types.Subtable[%s] `json:\"%s\"`\n",
+			goFieldName, rowStructName, field.Name))
+	} else {
+		// 通常フィールド
+		goTypeName := parser.TypeScriptToGoType(field.TypeName)
+		sb.WriteString(fmt.Sprintf("\t%s types.%s `json:\"%s\"`\n",
+			goFieldName, goTypeName, field.Name))
+	}
 }
 
 // toGoIdentifier は日本語フィールド名を Go の有効な識別子に変換する

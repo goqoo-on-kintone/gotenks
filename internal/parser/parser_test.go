@@ -114,6 +114,65 @@ declare namespace kintone.types {
 	}
 }
 
+func TestParse_Subtable(t *testing.T) {
+	input := `
+declare namespace kintone.types {
+  interface FacilityFields {
+    施設名: kintone.fieldTypes.SingleLineText;
+    部屋タイプ: {
+      type: "SUBTABLE";
+      value: {
+        id: string;
+        value: {
+          部屋タイプ名: kintone.fieldTypes.SingleLineText;
+          定員: kintone.fieldTypes.Number;
+        };
+      }[];
+    };
+    住所: kintone.fieldTypes.SingleLineText;
+  }
+}
+`
+	result, err := Parse(input)
+	if err != nil {
+		t.Fatalf("Parse failed: %v", err)
+	}
+
+	if len(result.Interfaces) != 1 {
+		t.Fatalf("expected 1 interface, got %d", len(result.Interfaces))
+	}
+
+	iface := result.Interfaces[0]
+	// 施設名, 部屋タイプ (SUBTABLE), 住所 = 3 fields
+	if len(iface.Fields) != 3 {
+		t.Errorf("expected 3 fields, got %d", len(iface.Fields))
+		for i, f := range iface.Fields {
+			t.Logf("field %d: %+v", i, f)
+		}
+	}
+
+	// 部屋タイプがSUBTABLEとして認識されているか
+	var subtableField *Field
+	for _, f := range iface.Fields {
+		if f.Name == "部屋タイプ" {
+			subtableField = &f
+			break
+		}
+	}
+
+	if subtableField == nil {
+		t.Fatal("部屋タイプ field not found")
+	}
+
+	if !subtableField.IsSubtable {
+		t.Error("部屋タイプ should be a subtable")
+	}
+
+	if len(subtableField.SubtableFields) != 2 {
+		t.Errorf("expected 2 subtable fields, got %d", len(subtableField.SubtableFields))
+	}
+}
+
 func TestParseFields(t *testing.T) {
 	tests := []struct {
 		name     string
