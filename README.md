@@ -9,6 +9,18 @@ A CLI tool that generates Go type definitions from kintone TypeScript type defin
 
 ## Installation
 
+### npm
+
+```bash
+npm install -g @goqoo/gotenks
+```
+
+Or use npx without global installation:
+
+```bash
+npx @goqoo/gotenks -input ./fields.d.ts -output ./gen/
+```
+
 ### Homebrew (macOS / Linux)
 
 ```bash

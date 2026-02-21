@@ -1,0 +1,32 @@
+{
+  "name": "@goqoo/gotenks",
+  "version": "0.1.0",
+  "description": "CLI tool to generate Go type definitions from kintone TypeScript .d.ts files",
+  "bin": {
+    "gotenks": "./bin/gotenks.js"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/goqoo-on-kintone/gotenks.git"
+  },
+  "homepage": "https://github.com/goqoo-on-kintone/gotenks",
+  "bugs": {
+    "url": "https://github.com/goqoo-on-kintone/gotenks/issues"
+  },
+  "keywords": [
+    "kintone",
+    "typescript",
+    "go",
+    "golang",
+    "code-generator",
+    "dts"
+  ],
+  "author": "goqoo-on-kintone",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -9,6 +9,18 @@ kintone の TypeScript 型定義ファイル (.d.ts) から Go の型定義を�
 
 ## インストール
 
+### npm
+
+```bash
+npm install -g @goqoo/gotenks
+```
+
+グローバルインストールなしで使う場合：
+
+```bash
+npx @goqoo/gotenks -input ./fields.d.ts -output ./gen/
+```
+
 ### Homebrew（macOS / Linux）
 
 ```bash
