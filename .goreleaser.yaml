@@ -1,0 +1,61 @@
+# GoReleaser 設定
+# 参考: https://goreleaser.com/customization/
+
+version: 2
+
+project_name: gotenks
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: gotenks
+    main: ./cmd/gotenks
+    binary: gotenks
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+
+archives:
+  - id: default
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+brews:
+  - name: gotenks
+    repository:
+      owner: goqoo-on-kintone
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: "https://github.com/goqoo-on-kintone/gotenks"
+    description: "CLI tool to generate Go type definitions from kintone TypeScript .d.ts files"
+    license: "MIT"
+    install: |
+      bin.install "gotenks"
+    test: |
+      system "#{bin}/gotenks", "-h"
