@@ -41,20 +41,11 @@ func generateStruct(sb *strings.Builder, iface parser.Interface, result *parser.
 	// extends の場合は自身のフィールドのみ処理する
 	generateSubtableRowStructs(sb, iface.Fields)
 
-	sb.WriteString(fmt.Sprintf("// %s は kintone アプリのレコード型\n", structName))
 	sb.WriteString(fmt.Sprintf("type %s struct {\n", structName))
 
-	// extends がある場合、親の埋め込みではなく親のフィールドも展開する
+	// extends がある場合、親の構造体を埋め込む
 	if iface.Extends != "" {
-		// 親インターフェースを探す
-		for _, parent := range result.Interfaces {
-			if parent.Name == iface.Extends {
-				for _, field := range parent.Fields {
-					generateField(sb, field)
-				}
-				break
-			}
-		}
+		sb.WriteString(fmt.Sprintf("\t%s\n", iface.Extends))
 	}
 
 	// 自身のフィールドを出力
@@ -74,7 +65,6 @@ func generateSubtableRowStructs(sb *strings.Builder, fields []parser.Field) {
 
 		rowStructName := toGoIdentifier(field.Name) + "Row"
 
-		sb.WriteString(fmt.Sprintf("// %s は %s サブテーブルの1行を表す\n", rowStructName, field.Name))
 		sb.WriteString(fmt.Sprintf("type %s struct {\n", rowStructName))
 
 		for _, subField := range field.SubtableFields {

@@ -70,8 +70,7 @@ func TestGenerate_WithExtends(t *testing.T) {
 	config := Config{PackageName: "kintone"}
 	code := Generate(result, config)
 
-	// SavedCustomerFields に親のフィールドが含まれているか
-	// SavedCustomerFields struct の中に 会社名 フィールドがあるはず
+	// SavedCustomerFields struct の定義があるか
 	if !strings.Contains(code, "type SavedCustomerFields struct") {
 		t.Error("generated code should contain SavedCustomerFields struct")
 	}
@@ -84,9 +83,9 @@ func TestGenerate_WithExtends(t *testing.T) {
 	savedEnd := strings.Index(code[savedStart:], "\n}\n")
 	savedStruct := code[savedStart : savedStart+savedEnd]
 
-	// 親のフィールドが含まれているか
-	if !strings.Contains(savedStruct, "会社名") {
-		t.Error("SavedCustomerFields should contain inherited field 会社名")
+	// 親の構造体が埋め込まれているか
+	if !strings.Contains(savedStruct, "CustomerFields") {
+		t.Error("SavedCustomerFields should embed CustomerFields")
 	}
 
 	// 自身のフィールドが含まれているか
