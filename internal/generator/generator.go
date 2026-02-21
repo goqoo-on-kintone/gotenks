@@ -92,17 +92,22 @@ func generateField(sb *strings.Builder, field parser.Field) {
 	}
 }
 
-// toGoIdentifier は日本語フィールド名を Go の有効な識別子に変換する
+// toGoIdentifier はフィールド名を Go の有効な識別子に変換する
+// すべてのフィールドに K プレフィックスを付けてエクスポート可能にする
 func toGoIdentifier(name string) string {
+	var result strings.Builder
+	result.WriteString("K") // Kintone の K プレフィックス
+
 	// $id, $revision は特別扱い
 	if name == "$id" {
-		return "ID"
+		result.WriteString("ID")
+		return result.String()
 	}
 	if name == "$revision" {
-		return "Revision"
+		result.WriteString("Revision")
+		return result.String()
 	}
 
-	var result strings.Builder
 	capitalizeNext := true
 
 	for _, r := range name {

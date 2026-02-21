@@ -38,9 +38,9 @@ func TestGenerate_SimpleStruct(t *testing.T) {
 		t.Error("generated code should contain CustomerFields struct")
 	}
 
-	// フィールドのチェック
-	if !strings.Contains(code, "会社名 types.SingleLineTextField") {
-		t.Error("generated code should contain 会社名 field")
+	// フィールドのチェック（Kプレフィックス付き）
+	if !strings.Contains(code, "K会社名 types.SingleLineTextField") {
+		t.Error("generated code should contain K会社名 field")
 	}
 	if !strings.Contains(code, `json:"会社名"`) {
 		t.Error("generated code should contain json tag for 会社名")
@@ -88,9 +88,9 @@ func TestGenerate_WithExtends(t *testing.T) {
 		t.Error("SavedCustomerFields should embed CustomerFields")
 	}
 
-	// 自身のフィールドが含まれているか
-	if !strings.Contains(savedStruct, "ID types.IDField") {
-		t.Error("SavedCustomerFields should contain ID field")
+	// 自身のフィールドが含まれているか（Kプレフィックス付き）
+	if !strings.Contains(savedStruct, "KID types.IDField") {
+		t.Error("SavedCustomerFields should contain KID field")
 	}
 }
 
@@ -99,17 +99,17 @@ func TestToGoIdentifier(t *testing.T) {
 		input    string
 		expected string
 	}{
-		{"$id", "ID"},
-		{"$revision", "Revision"},
-		{"会社名", "会社名"},
-		{"user_name", "UserName"},
-		{"user-name", "UserName"},
-		{"user/name", "UserName"},
-		{"user name", "UserName"},
-		{"firstName", "FirstName"},
-		{"FAX", "FAX"},
-		{"Webサイト", "Webサイト"},
-		{"施設No__タップ施設ID", "施設Noタップ施設ID"},
+		{"$id", "KID"},
+		{"$revision", "KRevision"},
+		{"会社名", "K会社名"},
+		{"user_name", "KUserName"},
+		{"user-name", "KUserName"},
+		{"user/name", "KUserName"},
+		{"user name", "KUserName"},
+		{"firstName", "KFirstName"},
+		{"FAX", "KFAX"},
+		{"Webサイト", "KWebサイト"},
+		{"施設No__タップ施設ID", "K施設Noタップ施設ID"},
 	}
 
 	for _, tt := range tests {
