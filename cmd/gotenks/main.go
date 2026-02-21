@@ -16,11 +16,18 @@ func main() {
 	input := flag.String("input", "", "Input .d.ts file or directory")
 	output := flag.String("output", "", "Output .go file or directory (default: stdout)")
 	pkg := flag.String("package", "kintone", "Package name for generated Go code")
+	prefix := flag.String("prefix", "K", "Prefix for field names (must start with uppercase letter)")
 	flag.Parse()
 
 	if *input == "" {
 		fmt.Fprintln(os.Stderr, "Error: -input is required")
 		flag.Usage()
+		os.Exit(1)
+	}
+
+	// プレフィックスの検証
+	if err := generator.ValidatePrefix(*prefix); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -33,10 +40,10 @@ func main() {
 
 	if info.IsDir() {
 		// ディレクトリの場合、全 .d.ts ファイルを処理
-		err = processDirectory(*input, *output, *pkg)
+		err = processDirectory(*input, *output, *pkg, *prefix)
 	} else {
 		// 単一ファイルの場合
-		err = processFile(*input, *output, *pkg)
+		err = processFile(*input, *output, *pkg, *prefix)
 	}
 
 	if err != nil {
@@ -46,7 +53,7 @@ func main() {
 }
 
 // processDirectory はディレクトリ内の全 .d.ts ファイルを処理する
-func processDirectory(inputDir, outputDir, pkg string) error {
+func processDirectory(inputDir, outputDir, pkg, prefix string) error {
 	entries, err := os.ReadDir(inputDir)
 	if err != nil {
 		return err
@@ -69,7 +76,7 @@ func processDirectory(inputDir, outputDir, pkg string) error {
 			outputPath = filepath.Join(outputDir, baseName+".go")
 		}
 
-		if err := processFile(inputPath, outputPath, pkg); err != nil {
+		if err := processFile(inputPath, outputPath, pkg, prefix); err != nil {
 			return fmt.Errorf("processing %s: %w", entry.Name(), err)
 		}
 	}
@@ -78,7 +85,7 @@ func processDirectory(inputDir, outputDir, pkg string) error {
 }
 
 // processFile は単一の .d.ts ファイルを処理する
-func processFile(inputPath, outputPath, pkg string) error {
+func processFile(inputPath, outputPath, pkg, prefix string) error {
 	// パース
 	result, err := parser.ParseFile(inputPath)
 	if err != nil {
@@ -88,6 +95,7 @@ func processFile(inputPath, outputPath, pkg string) error {
 	// コード生成
 	config := generator.Config{
 		PackageName: pkg,
+		Prefix:      prefix,
 	}
 	code := generator.Generate(result, config)
 

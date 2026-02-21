@@ -20,7 +20,7 @@ func TestGenerate_SimpleStruct(t *testing.T) {
 		},
 	}
 
-	config := Config{PackageName: "kintone"}
+	config := Config{PackageName: "kintone", Prefix: "K"}
 	code := Generate(result, config)
 
 	// パッケージ宣言のチェック
@@ -67,7 +67,7 @@ func TestGenerate_WithExtends(t *testing.T) {
 		},
 	}
 
-	config := Config{PackageName: "kintone"}
+	config := Config{PackageName: "kintone", Prefix: "K"}
 	code := Generate(result, config)
 
 	// SavedCustomerFields struct の定義があるか
@@ -114,9 +114,9 @@ func TestToGoIdentifier(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.input, func(t *testing.T) {
-			got := toGoIdentifier(tt.input)
+			got := toGoIdentifier(tt.input, "K")
 			if got != tt.expected {
-				t.Errorf("toGoIdentifier(%q) = %q, want %q", tt.input, got, tt.expected)
+				t.Errorf("toGoIdentifier(%q, \"K\") = %q, want %q", tt.input, got, tt.expected)
 			}
 		})
 	}

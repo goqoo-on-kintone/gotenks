@@ -12,6 +12,7 @@ import (
 // Config は生成オプション
 type Config struct {
 	PackageName string // 生成するパッケージ名
+	Prefix      string // フィールド名のプレフィックス（デフォルト: "K"）
 }
 
 // Generate はパース結果から Go コードを生成する
@@ -26,20 +27,20 @@ func Generate(result *parser.ParseResult, config Config) string {
 
 	// 各インターフェースを struct に変換
 	for _, iface := range result.Interfaces {
-		generateStruct(&sb, iface, result)
+		generateStruct(&sb, iface, result, config)
 	}
 
 	return sb.String()
 }
 
 // generateStruct は interface を Go の struct として出力する
-func generateStruct(sb *strings.Builder, iface parser.Interface, result *parser.ParseResult) {
+func generateStruct(sb *strings.Builder, iface parser.Interface, result *parser.ParseResult, config Config) {
 	structName := iface.Name
 
 	// まずサブテーブルの Row 構造体を先に生成
 	// 注: 親の Row 構造体は親インターフェース処理時に既に生成されているため、
 	// extends の場合は自身のフィールドのみ処理する
-	generateSubtableRowStructs(sb, iface.Fields)
+	generateSubtableRowStructs(sb, iface.Fields, config)
 
 	sb.WriteString(fmt.Sprintf("type %s struct {\n", structName))
 
@@ -50,25 +51,25 @@ func generateStruct(sb *strings.Builder, iface parser.Interface, result *parser.
 
 	// 自身のフィールドを出力
 	for _, field := range iface.Fields {
-		generateField(sb, field)
+		generateField(sb, field, config)
 	}
 
 	sb.WriteString("}\n\n")
 }
 
 // generateSubtableRowStructs はサブテーブルの Row 構造体を生成する
-func generateSubtableRowStructs(sb *strings.Builder, fields []parser.Field) {
+func generateSubtableRowStructs(sb *strings.Builder, fields []parser.Field, config Config) {
 	for _, field := range fields {
 		if !field.IsSubtable {
 			continue
 		}
 
-		rowStructName := toGoIdentifier(field.Name) + "Row"
+		rowStructName := toGoIdentifier(field.Name, config.Prefix) + "Row"
 
 		sb.WriteString(fmt.Sprintf("type %s struct {\n", rowStructName))
 
 		for _, subField := range field.SubtableFields {
-			generateField(sb, subField)
+			generateField(sb, subField, config)
 		}
 
 		sb.WriteString("}\n\n")
@@ -76,8 +77,8 @@ func generateSubtableRowStructs(sb *strings.Builder, fields []parser.Field) {
 }
 
 // generateField は1つのフィールドを出力する
-func generateField(sb *strings.Builder, field parser.Field) {
-	goFieldName := toGoIdentifier(field.Name)
+func generateField(sb *strings.Builder, field parser.Field, config Config) {
+	goFieldName := toGoIdentifier(field.Name, config.Prefix)
 
 	if field.IsSubtable {
 		// サブテーブルフィールド
@@ -93,10 +94,10 @@ func generateField(sb *strings.Builder, field parser.Field) {
 }
 
 // toGoIdentifier はフィールド名を Go の有効な識別子に変換する
-// すべてのフィールドに K プレフィックスを付けてエクスポート可能にする
-func toGoIdentifier(name string) string {
+// すべてのフィールドにプレフィックスを付けてエクスポート可能にする
+func toGoIdentifier(name string, prefix string) string {
 	var result strings.Builder
-	result.WriteString("K") // Kintone の K プレフィックス
+	result.WriteString(prefix)
 
 	// $id, $revision は特別扱い
 	if name == "$id" {
@@ -130,4 +131,18 @@ func toGoIdentifier(name string) string {
 	}
 
 	return result.String()
+}
+
+// ValidatePrefix はプレフィックスが有効かどうかを検証する
+// 空文字（プレフィックスなし）または先頭が英大文字である必要がある
+func ValidatePrefix(prefix string) error {
+	if prefix == "" {
+		// 空文字はプレフィックスなしとして許容
+		return nil
+	}
+	firstRune := []rune(prefix)[0]
+	if !unicode.IsUpper(firstRune) || !unicode.IsLetter(firstRune) {
+		return fmt.Errorf("prefix must start with an uppercase letter: %q", prefix)
+	}
+	return nil
 }
