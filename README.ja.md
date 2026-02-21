@@ -38,6 +38,36 @@ gotenks -input ./dts -output ./gen -prefix ""
 | `-package` | `kintone` | 生成する Go コードのパッケージ名 |
 | `-prefix` | `K` | フィールド名のプレフィックス（日本語フィールド名のエクスポート用） |
 
+## 対応フィールド型
+
+| カテゴリ | TypeScript | Go 型 |
+|---------|------------|-------|
+| **文字列系** | `SingleLineText` | `SingleLineTextField` |
+| | `MultiLineText` | `MultiLineTextField` |
+| | `RichText` | `RichTextField` |
+| | `Number` | `NumberField` |
+| | `Link` | `LinkField` |
+| **日時系** | `Date` | `DateField` |
+| | `Time` | `TimeField` |
+| | `DateTime` | `DateTimeField` |
+| **選択系（単一）** | `DropDown` | `DropDownField` |
+| | `RadioButton` | `RadioButtonField` |
+| **選択系（複数）** | `CheckBox` | `CheckBoxField` |
+| | `MultiSelect` | `MultiSelectField` |
+| **計算** | `Calc` | `CalcField` |
+| **ユーザー/組織/グループ** | `UserSelect` | `UserSelectField` |
+| | `OrganizationSelect` | `OrganizationSelectField` |
+| | `GroupSelect` | `GroupSelectField` |
+| | `Creator` | `CreatorField` |
+| | `Modifier` | `ModifierField` |
+| **ファイル** | `File` | `FileField` |
+| **システム** | `Id` | `IDField` |
+| | `Revision` | `RevisionField` |
+| | `RecordNumber` | `RecordNumberField` |
+| | `CreatedTime` | `CreatedTimeField` |
+| | `UpdatedTime` | `UpdatedTimeField` |
+| **サブテーブル** | `SUBTABLE` | `Subtable[T]` |
+
 ## 入力ファイルの生成
 
 入力となる `.d.ts` ファイルは [@kintone/dts-gen](https://github.com/kintone/js-sdk/tree/main/packages/dts-gen) で生成できます。
