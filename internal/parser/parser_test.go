@@ -201,6 +201,17 @@ func TestParseFields(t *testing.T) {
 				{Name: "$id", TypeName: "Id"},
 			},
 		},
+		{
+			name: "fields with comments",
+			input: `// 文字列系
+    一行テキスト: kintone.fieldTypes.SingleLineText;
+    // 日時系
+    日付: kintone.fieldTypes.Date;`,
+			expected: []Field{
+				{Name: "一行テキスト", TypeName: "SingleLineText"},
+				{Name: "日付", TypeName: "Date"},
+			},
+		},
 	}
 
 	for _, tt := range tests {

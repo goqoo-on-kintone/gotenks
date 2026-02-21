@@ -107,6 +107,15 @@ func parseFields(content string) []Field {
 			break
 		}
 
+		// コメント行をスキップ（// で始まる行）
+		if i+1 < len(content) && content[i] == '/' && content[i+1] == '/' {
+			// 行末までスキップ
+			for i < len(content) && content[i] != '\n' {
+				i++
+			}
+			continue
+		}
+
 		// フィールド名を抽出（: まで）
 		fieldStart := i
 		for i < len(content) && content[i] != ':' {
