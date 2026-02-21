@@ -23,7 +23,7 @@ func Generate(result *parser.ParseResult, config Config) string {
 	sb.WriteString(fmt.Sprintf("package %s\n\n", config.PackageName))
 
 	// types パッケージのインポート
-	sb.WriteString("import \"github.com/goqoo-on-kintone/gotenks/internal/types\"\n\n")
+	sb.WriteString("import \"github.com/goqoo-on-kintone/gotenks/types\"\n\n")
 
 	// 各インターフェースを struct に変換
 	for _, iface := range result.Interfaces {

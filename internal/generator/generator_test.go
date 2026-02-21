@@ -29,7 +29,7 @@ func TestGenerate_SimpleStruct(t *testing.T) {
 	}
 
 	// import のチェック
-	if !strings.Contains(code, `import "github.com/goqoo-on-kintone/gotenks/internal/types"`) {
+	if !strings.Contains(code, `import "github.com/goqoo-on-kintone/gotenks/types"`) {
 		t.Error("generated code should import types package")
 	}
 
