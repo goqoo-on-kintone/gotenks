@@ -1,6 +1,11 @@
 # gotenks
 
-kintone の TypeScript 型定義ファイル (.d.ts) から Go の型定義を生成する CLI ツール。
+[![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)](https://go.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+English | [日本語](/README.ja.md)
+
+A CLI tool that generates Go type definitions from kintone TypeScript type definition files (.d.ts).
 
 ## Installation
 
@@ -11,31 +16,31 @@ go install github.com/goqoo-on-kintone/gotenks/cmd/gotenks@latest
 ## Usage
 
 ```bash
-# ディレクトリ内の全 .d.ts ファイルを変換
+# Convert all .d.ts files in a directory
 gotenks -input ./dts -output ./gen/kintone
 
-# 単一ファイルを変換
+# Convert a single file
 gotenks -input ./customer-fields.d.ts -output ./customer.go
 
-# パッケージ名を指定
+# Specify package name
 gotenks -input ./dts -output ./gen -package myapp
 
-# prefix なしで生成（ASCII フィールドコードのみの場合）
+# Generate without prefix (for ASCII-only field codes)
 gotenks -input ./dts -output ./gen -prefix ""
 ```
 
 ## Options
 
-| オプション | デフォルト | 説明 |
-|-----------|-----------|------|
-| `-input` | (必須) | 入力 .d.ts ファイルまたはディレクトリ |
-| `-output` | stdout | 出力 .go ファイルまたはディレクトリ |
-| `-package` | `kintone` | 生成する Go コードのパッケージ名 |
-| `-prefix` | `K` | フィールド名のプレフィックス（日本語フィールド名のエクスポート用） |
+| Option | Default | Description |
+|--------|---------|-------------|
+| `-input` | (required) | Input .d.ts file or directory |
+| `-output` | stdout | Output .go file or directory |
+| `-package` | `kintone` | Package name for generated Go code |
+| `-prefix` | `K` | Prefix for field names (for exporting Japanese field names) |
 
-## 入力ファイルの生成
+## Generating Input Files
 
-入力となる `.d.ts` ファイルは [@kintone/dts-gen](https://github.com/kintone/js-sdk/tree/main/packages/dts-gen) で生成できます。
+Input `.d.ts` files can be generated using [@kintone/dts-gen](https://github.com/kintone/js-sdk/tree/main/packages/dts-gen).
 
 ```bash
 npx @kintone/dts-gen --base-url https://YOUR_SUBDOMAIN.cybozu.com \
@@ -47,13 +52,13 @@ npx @kintone/dts-gen --base-url https://YOUR_SUBDOMAIN.cybozu.com \
 ## Development
 
 ```bash
-# ビルド
+# Build
 make build
 
-# テスト
+# Test
 make test
 
-# 開発用ビルド & 実行
+# Build & Run
 make run
 ```
 
